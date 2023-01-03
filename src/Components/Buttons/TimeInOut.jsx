@@ -16,11 +16,7 @@ const TimeInOut = ({clockState,
                     setLoadOnFetch
                 }) => {
 
-  const {user} = UserAuth()
-
   const lastLoginIn = employee?.slice(-1)[0]
-
-  console.log((!lastLoginIn?.timeIn && !employee.length) || dayPassed)
   
   return (
     <div className='w-full flex items-center flex-col pt-[7rem] pb-10'> 
