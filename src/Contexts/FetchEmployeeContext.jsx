@@ -138,9 +138,12 @@ const FetchEmployeeContextProvider = ({children}) => {
                   return
                 }
           }
-            unabledToTimeOut()
-            setDayPassed(true)
+          else if(employee?.length === 0){
             return
+          }
+          unabledToTimeOut()
+          setDayPassed(true)
+          return
 
       },[clockState?.currentTime])
 
