@@ -60,10 +60,7 @@ const Login = () => {
             <form autoComplete='off' className='flex flex-col gap-4'>
               <Form header="Login" title="sign in" formData={formData} handleChange={handleChange} email={formData.username} password={formData.password}/>
                 <div className='flex flex-col gap-4'>
-                    {/* <button onClick={handleAdmin} className={`login-button bg-blue-400 rounded text-white py-1 hover:bg-blue-300 ${isValid ? "bg-blue-400 pointer-events-auto": "bg-blue-300 pointer-events-none"}`}>Login as Admin</button> */}
-                    {/* <button onClick={handleEmployee} className={`login-button bg-blue-400 rounded text-white py-1 hover:bg-blue-300 ${isValid ? "bg-blue-400 pointer-events-auto": "bg-blue-300 pointer-events-none"}`}>Login as Employee</button> */}
-                    <GoogleButton onClick={handleGoogleSignIn} style={{width: "100%", overflow: "hidden"}}/>
-                    {/* <Link to='/signup' className='login-button text-center bg-yellow-400 rounded text-white py-1 hover:bg-yellow-300'>Sign up</Link> */}
+                  <GoogleButton onClick={handleGoogleSignIn} style={{width: "100%", overflow: "hidden"}}/>
                 </div>
             </form>  
         </div>

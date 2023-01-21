@@ -21,6 +21,12 @@ const FetchEmployeeContextProvider = ({children}) => {
 
     const [loadOnFetch, setLoadOnFetch ] = useState()
 
+    const [sameDay, setSameDay] = useState()
+    const [later, setLater] = useState()
+
+    const [buttonDisabled, setButtonDisabled] = useState(undefined)
+  
+
 
     const {user} = UserAuth()
 
@@ -41,7 +47,6 @@ const FetchEmployeeContextProvider = ({children}) => {
         return yesterday
       }
 
-      // console.log(employee)
       const index = employee?.findIndex(value => (value.dateIn === clockState?.currentDate || value.dateIn === handleYesterday()) && value.email === user?.email && !value.timeOut && !value.dateOut) 
 
       useEffect (() => {
@@ -57,7 +62,6 @@ const FetchEmployeeContextProvider = ({children}) => {
           })
           setEmployee(employeeArray)
           setLoadOnFetch(false)
-         
         })
         return unsub
       },[])
@@ -78,6 +82,8 @@ const FetchEmployeeContextProvider = ({children}) => {
       const isTimedIn = filterCurrentUser?.slice(-1)[0]
 
       const lastLogin = employee?.slice(-1)[0]
+    
+      
       useEffect(() => {
 
           employee?.filter(doc => {
@@ -92,55 +98,74 @@ const FetchEmployeeContextProvider = ({children}) => {
           const due = "08:00:00 AM"
 
           const currentDate = new Date(moment().format('MMMM DD, YYYY'))
-  
+
+          /* function for checking the actual hour time right now */
+          const checkCurrentHourTime = () => {
+            const currentHourTime = clockState?.currentTime.substring(0,2) 
+            if(currentHourTime > 0 && currentHourTime < 8){
+              setButtonDisabled(true)
+            }
+            else {
+              setButtonDisabled(false)
+            }
+          }
+
+          /* function for checking the current time  */
+          const checkCurrentTime = () => {
+            if(lastLogin?.timeStamp === currentDate.getTime()){
+              setSameDay(true)
+              setDayPassed(false)
+              return  
+            }
+            /* If it's a day ago from the moment user timed in, check if it's still not 8am*/
+            if(clockState?.currentTime.substring(0,2) < due.substring(0,2)){
+              setLater(true)
+              
+              setDayPassed(false)
+              // console.log('all goods, wala pang 8am')
+              return
+            }
+          }          
           /* Check if the user timed in*/
           if((lastLogin?.dateIn === clockState?.currentDate) || (lastLogin?.dateIn === handleYesterday())){
+            checkCurrentHourTime()
             /* Check if user timed out from the last session */
             if(lastLogin?.timeOut){ 
               /* don't do anything if same day */
-              if(lastLogin?.timeStamp === currentDate.getTime()){
-                // console.log('same day poh')
-                setDayPassed(false)
-                return  
-              }
-           /* If it's a day ago from the moment user timed in, check if it's still not 8am*/
-              if(clockState?.currentTime.substring(0,2) < due.substring(0,2)){
-                setDayPassed(false)
-                // console.log('all goods, wala pang 8am')
+              if(lastLogin?.timeStamp === currentDate.getTime() || clockState?.currentTime.substring(0,2) < due.substring(0,2)){
+                checkCurrentTime()
                 return
               }
-              else{
-                setDayPassed(true)
-                // console.log('ok na pwede na ulit time in')
-                return
-              }
+              setDayPassed(true)
+              // console.log('ok na pwede na ulit time in')
+              return
             }
+
+
+
+            /* -------------------------------------------------------------------------------------------- */
+
+            
             /* if user hasnt timed out yet*/
             if(lastLogin?.timeStamp === undefined) {
               return
             } 
-            /* Check if it's still the same day */
-              if(lastLogin?.timeStamp === currentDate.getTime()){
-                setDayPassed(false)
-                return  
-              }
-              /* If it's a day ago from the moment user timed in, check if it's still not 8am*/
-                if(clockState?.currentTime.substring(0,2) < due.substring(0,2)){
-                  setDayPassed(false)
-                  // console.log('all goods, wala pang 8am')
-                  return
-                }
-                /* If it's already 8am onwards */
-                else{
-                  // console.log('unable to time out')
-                  setDayPassed(true)
-                  // unabledToTimeOut()
-                  return
-                }
-          }
-          else if(employee?.length === 0){
+            if(lastLogin?.timeStamp === currentDate.getTime() || clockState?.currentTime.substring(0,2) < due.substring(0,2)){
+              checkCurrentTime()
+              return
+            }
+            // console.log('unable to time out')
+            setDayPassed(true)
+            unabledToTimeOut()
+  
             return
           }
+          else if(employee?.length === 0){
+            checkCurrentHourTime()
+            checkCurrentTime()
+            return
+          }
+          checkCurrentHourTime()
           unabledToTimeOut()
           setDayPassed(true)
           return
@@ -167,7 +192,10 @@ const FetchEmployeeContextProvider = ({children}) => {
             dayPassed,
             lastLogin,
             loadOnFetch,
-            setLoadOnFetch
+            setLoadOnFetch,
+            sameDay,
+            later,
+            buttonDisabled
         }
         }>
         {children}

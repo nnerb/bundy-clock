@@ -34,7 +34,10 @@ const Employee = () => {
     dayPassed,
     lastLogin,
     loadOnFetch,
-    setLoadOnFetch
+    setLoadOnFetch,
+    sameDay,
+    later,
+    buttonDisabled
   } = useFetchEmployeeContext()
   
  
@@ -60,6 +63,8 @@ const Employee = () => {
     }
     
   }
+
+
   
   const handleTimeOut = async () => {
     setTimeOutLoading(true)
@@ -82,7 +87,7 @@ const Employee = () => {
         <ThreeDots color='white' ariaLabel='loading' />
       </div> :
       <div className=''>
-        <TimeInOut setLoadOnFetch={setLoadOnFetch} loadOnFetch={loadOnFetch} clockState={clockState} loading={loading} employee={employee} handleTimeIn={handleTimeIn} handleTimeOut={handleTimeOut} timeOutLoading={timeOutLoading} currentData={currentData} isTimedIn={isTimedIn} dayPassed={dayPassed}/>
+        <TimeInOut buttonDisabled={buttonDisabled} later={later} sameDay={sameDay} setLoadOnFetch={setLoadOnFetch} loadOnFetch={loadOnFetch} clockState={clockState} loading={loading} employee={employee} handleTimeIn={handleTimeIn} handleTimeOut={handleTimeOut} timeOutLoading={timeOutLoading} currentData={currentData} isTimedIn={isTimedIn} dayPassed={dayPassed}/>
         <EmployeeTable/>
         <Footer/>
       </div>
