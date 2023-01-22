@@ -102,7 +102,13 @@ const FetchEmployeeContextProvider = ({children}) => {
           /* function for checking the actual hour time right now */
           const checkCurrentHourTime = () => {
             const currentHourTime = clockState?.currentTime.substring(0,2) 
-            if(currentHourTime > 0 && currentHourTime < 8){
+            /* 5pm onwards */
+            if(currentHourTime > 17){
+              setButtonDisabled(true)
+              setSameDay(true)
+            }
+            /* 12am onwards and before 8am  */
+            else if(currentHourTime > 0 && currentHourTime < 8) {
               setButtonDisabled(true)
               setLater(true)
             }
