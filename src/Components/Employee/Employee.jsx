@@ -73,7 +73,10 @@ const Employee = () => {
       timeOut: clockState.currentTime,
       dateOut: clockState.currentDate,
       status: "Completed",
-      renderedHours: clockState?.currentTime.slice(0,2) - lastLogin?.timeIn.slice(0,2),
+      renderedHours: (clockState?.currentTime.slice(0,2) > 11 ?
+                      clockState?.currentTime.slice(0,2) - 1 :
+                      clockState?.currentTime.slice(0,2)) -
+                      lastLogin?.timeIn.slice(0,2),
     }) 
     setTimeOutLoading(false)
   }
