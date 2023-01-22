@@ -120,7 +120,6 @@ const FetchEmployeeContextProvider = ({children}) => {
             /* If it's a day ago from the moment user timed in, check if it's still not 8am*/
             if(clockState?.currentTime.substring(0,2) < due.substring(0,2)){
               setLater(true)
-              
               setDayPassed(false)
               // console.log('all goods, wala pang 8am')
               return
@@ -151,7 +150,7 @@ const FetchEmployeeContextProvider = ({children}) => {
               return
             } 
             if(lastLogin?.timeStamp === currentDate.getTime() || clockState?.currentTime.substring(0,2) < due.substring(0,2)){
-              checkCurrentTime()
+              setDayPassed(false)
               return
             }
             // console.log('unable to time out')
