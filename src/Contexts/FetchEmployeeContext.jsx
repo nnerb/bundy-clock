@@ -104,6 +104,7 @@ const FetchEmployeeContextProvider = ({children}) => {
             const currentHourTime = clockState?.currentTime.substring(0,2) 
             if(currentHourTime > 0 && currentHourTime < 8){
               setButtonDisabled(true)
+              setLater(true)
             }
             else {
               setButtonDisabled(false)
@@ -124,7 +125,11 @@ const FetchEmployeeContextProvider = ({children}) => {
               // console.log('all goods, wala pang 8am')
               return
             }
+            checkCurrentHourTime()
+            return
           }          
+
+
           /* Check if the user timed in*/
           if((lastLogin?.dateIn === clockState?.currentDate) || (lastLogin?.dateIn === handleYesterday())){
             checkCurrentHourTime()
@@ -164,6 +169,7 @@ const FetchEmployeeContextProvider = ({children}) => {
             checkCurrentTime()
             return
           }
+
           checkCurrentHourTime()
           unabledToTimeOut()
           setDayPassed(true)
